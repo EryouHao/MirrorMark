@@ -4,347 +4,347 @@
  * License: MIT
  */
 (function(CodeMirror) { 'use strict';
-    /**
-     * Bootstrap our module
-     */
-    (function(fn) {
-        if (typeof exports == "object" && typeof module == "object") { // CommonJS
-          module.exports = fn;
-        } else if (typeof define == "function" && define.amd) { // AMD
-          return define([], fn);
-        }
+	/**
+	 * Bootstrap our module
+	 */
+	(function(fn) {
+		if (typeof exports == "object" && typeof module == "object") { // CommonJS
+		  module.exports = fn;
+		} else if (typeof define == "function" && define.amd) { // AMD
+		  return define([], fn);
+		}
 
-        if (window)
-            window.mirrorMark = fn
-    })(mirrorMark);
+		if (window)
+			window.mirrorMark = fn
+	})(mirrorMark);
 
-    /**
-     * Merge
-     *
-     *
-     * @param  {Object}        object The object to merge into
-     * @param  {Object/Array}  source The object or array of objects to merge
-     * @return {Object}         The original object
-     */
-    function merge(object, source) {
-        if(Array.isArray(source)) {
-            for(var i = sources.length - 1; i >= 0; i--) {
-                merge(object, source[i]);
-            }
-        } else {
-            for (var attrname in source) {
-                object[attrname] = source[attrname];
-            }
-        }
+	/**
+	 * Merge
+	 *
+	 *
+	 * @param  {Object}		object The object to merge into
+	 * @param  {Object/Array}  source The object or array of objects to merge
+	 * @return {Object}		 The original object
+	 */
+	function merge(object, source) {
+		if(Array.isArray(source)) {
+			for(var i = sources.length - 1; i >= 0; i--) {
+				merge(object, source[i]);
+			}
+		} else {
+			for (var attrname in source) {
+				object[attrname] = source[attrname];
+			}
+		}
 
-        return object;
-    }
+		return object;
+	}
 
-    /**
-     * Our delegate prototype used by our factory
-     * @type {Object}
-     */
-    var mirrorMarkProto = {
+	/**
+	 * Our delegate prototype used by our factory
+	 * @type {Object}
+	 */
+	var mirrorMarkProto = {
 
-        /**
-         * Render the component
-         */
-        render: function render() {
-            this.registerKeyMaps(this.keyMaps);
-            this.cm = CodeMirror.fromTextArea(this.element, this.options);
+		/**
+		 * Render the component
+		 */
+		render: function render() {
+			this.registerKeyMaps(this.keyMaps);
+			this.cm = CodeMirror.fromTextArea(this.element, this.options);
 
-            if (this.options.showToolbar) {
-              this.setToolbar(this.tools);
-            }
-        },
+			if (this.options.showToolbar) {
+			  this.setToolbar(this.tools);
+			}
+		},
 
-        /**
-         * Setup the toolbar
-         */
-        setToolbar: function setToolbar(tools) {
+		/**
+		 * Setup the toolbar
+		 */
+		setToolbar: function setToolbar(tools) {
 
-            var toolbar = document.createElement('ul');
-                toolbar.className = this.options.theme + '-' + 'toolbar';
+			var toolbar = document.createElement('ul');
+				toolbar.className = this.options.theme + '-' + 'toolbar';
 
-            var tools = this.generateToolList(tools);
+			var tools = this.generateToolList(tools);
 
-            tools.forEach(function(tool) {
-                toolbar.appendChild(tool)
-            });
+			tools.forEach(function(tool) {
+				toolbar.appendChild(tool)
+			});
 
-            var cmWrapper = this.cm.getWrapperElement();
-                cmWrapper.parentNode.insertBefore(toolbar, cmWrapper);
+			var cmWrapper = this.cm.getWrapperElement();
+				cmWrapper.parentNode.insertBefore(toolbar, cmWrapper);
 
-        },
+		},
 
-        /**
-         * Register Keymaps by extending the extraKeys object
-         * @param {Object} keyMaps
-         */
-        registerKeyMaps: function registerKeyMaps(keyMaps) {
-            for (var name in keyMaps) {
-                if (typeof(this.actions[keyMaps[name]]) !== 'function') throw "MirrorMark - '" + keyMaps[name] + "' is not a registered action";
+		/**
+		 * Register Keymaps by extending the extraKeys object
+		 * @param {Object} keyMaps
+		 */
+		registerKeyMaps: function registerKeyMaps(keyMaps) {
+			for (var name in keyMaps) {
+				if (typeof(this.actions[keyMaps[name]]) !== 'function') throw "MirrorMark - '" + keyMaps[name] + "' is not a registered action";
 
-                var realName = name.replace("Cmd-", (CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault) ? "Cmd-" : "Ctrl-");
-                this.options.extraKeys[realName] = this.actions[keyMaps[name]].bind(this)
-            }
-        },
-
-
-        /**
-         * Register actions by extending the default actions
-         * @param  {Object} actions [description]
-         */
-        registerActions: function registerActions(actions) {
-            return merge(this.actions, actions);
-        },
+				var realName = name.replace("Cmd-", (CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault) ? "Cmd-" : "Ctrl-");
+				this.options.extraKeys[realName] = this.actions[keyMaps[name]].bind(this)
+			}
+		},
 
 
-        /**
-         * Register tools by extending and overwriting the default tools
-         * @param  {Array} tools
-         * @param  {Bool} replace - replace the default tools with the ones provided. Defaults to false.
-         */
-        registerTools: function registerTools(tools, replace) {
-            for (var action in tools) {
-                if (this.actions[tools[action].action] && typeof(this.actions[tools[action].action]) !== 'function') throw "MirrorMark - '" + tools[action].action + "' is not a registered action";
-            }
+		/**
+		 * Register actions by extending the default actions
+		 * @param  {Object} actions [description]
+		 */
+		registerActions: function registerActions(actions) {
+			return merge(this.actions, actions);
+		},
 
-            if (replace) {
-                this.tools = tools;
-                return;
-            }
 
-            this.tools = this.tools.concat(tools)
-        },
+		/**
+		 * Register tools by extending and overwriting the default tools
+		 * @param  {Array} tools
+		 * @param  {Bool} replace - replace the default tools with the ones provided. Defaults to false.
+		 */
+		registerTools: function registerTools(tools, replace) {
+			for (var action in tools) {
+				if (this.actions[tools[action].action] && typeof(this.actions[tools[action].action]) !== 'function') throw "MirrorMark - '" + tools[action].action + "' is not a registered action";
+			}
 
-        /**
-         * A recursive function to generate and return an unordered list of tools
-         * @param  {Object}
-         */
-        generateToolList: function generateToolList(tools) {
-            return tools.map(function(tool) {
-                var item = document.createElement("li"),
-                    anchor = document.createElement("a");
+			if (replace) {
+				this.tools = tools;
+				return;
+			}
 
-                item.className = tool.name;
+			this.tools = this.tools.concat(tools)
+		},
 
-                if (tool.className) {
-                    anchor.className = tool.className;
-                }
+		/**
+		 * A recursive function to generate and return an unordered list of tools
+		 * @param  {Object}
+		 */
+		generateToolList: function generateToolList(tools) {
+			return tools.map(function(tool) {
+				var item = document.createElement("li"),
+					anchor = document.createElement("a");
 
-                if (tool.showName) {
-                    var text = document.createTextNode(tool.name);
-                    anchor.appendChild(text);
-                }
+				item.className = tool.name;
 
-                if (tool.action) {
-                    anchor.onclick = function(e) {
-                      this.cm.focus();
-                      this.actions[tool.action].call(this);
-                    }.bind(this);
-                }
+				if (tool.className) {
+					anchor.className = tool.className;
+				}
 
-                item.appendChild(anchor);
+				if (tool.showName) {
+					var text = document.createTextNode(tool.name);
+					anchor.appendChild(text);
+				}
 
-                if (tool.nested) {
-                    item.className += " has-nested";
-                    var ul = document.createElement('ul');
-                        ul.className = this.options.theme + "-toolbar-list"
-                    var nested = generateToolList.call(this, tool.nested);
-                        nested.forEach(function(nestedItem) {
-                            ul.appendChild(nestedItem);
-                        });
+				if (tool.action) {
+					anchor.onclick = function(e) {
+					  this.cm.focus();
+					  this.actions[tool.action].call(this);
+					}.bind(this);
+				}
 
-                    item.appendChild(ul);
-                }
+				item.appendChild(anchor);
 
-                return item
+				if (tool.nested) {
+					item.className += " has-nested";
+					var ul = document.createElement('ul');
+						ul.className = this.options.theme + "-toolbar-list"
+					var nested = generateToolList.call(this, tool.nested);
+						nested.forEach(function(nestedItem) {
+							ul.appendChild(nestedItem);
+						});
 
-            }.bind(this));
-        },
+					item.appendChild(ul);
+				}
 
-        /**
-         * Default Tools in Toolbar
-         * @todo - update so it's not so tightly coupled with Font Awesome.
-         */
-        tools: [
-          { name: "bold", action: "bold", className: "fa fa-bold" },
-          { name: "italicize", action: "italicize", className: "fa fa-italic" },
-          { name: "blockquote", action: "blockquote", className: "fa fa-quote-left" },
-          { name: "strikethrough", action: "strikethrough", className: "fs fa-strikethrough" },
-          { name: "link", action: "link", className: "fa fa-link" },
-          { name: "image", action: "image", className: "fa fa-image" },
-          { name: "unorderedList", action: "unorderedList", className: "fa fa-list" },
-          { name: "orderedList", action: "orderedList", className: "fa fa-list-ol" },
-          { name: "fullScreen", action: "fullScreen", className: "fa fa-expand" },
-        ],
+				return item
 
-        /**
-         * Default Keymaps
-         * @type {Object}
-         */
-        keyMaps: {
-            "Cmd-B": 'bold',
-            "Cmd-I": 'italicize',
-            "Cmd-'": 'blockquote',
-            "Cmd-Alt-L": 'orderedList',
-            "Cmd-L": 'unorderedList',
-            "Cmd-Alt-I": 'image',
-            "Cmd-H": 'hr',
-            "Cmd-K": 'link',
-            "F11": "fullScreen",
-            "Esc": "exitFullScreen",
-        },
+			}.bind(this));
+		},
 
-        /**
-         * Default Actions
-         * @type {Object}
-         */
-        actions: {
-            bold: function () {
-                this.toggleAround('**', '**')
-            },
-            italicize: function () {
-                this.toggleAround('*', '*')
-            },
-            strikethrough: function () {
-                this.toggleAround('~~', '~~')
-            },
-            "code": function () {
-                this.toggleAround('```\r\n', '\r\n```')
-            },
-            "blockquote": function () {
-                this.toggleBefore('> ');
-            },
-            "orderedList": function () {
-                this.toggleBefore('1. ');
-            },
-            "unorderedList": function () {
-                this.toggleBefore('* ');
-            },
-            "image": function () {
-                this.toggleAround('![', '](http://)');
-            },
-            "link": function () {
-                this.toggleAround('[', '](http://)');
-            },
-            "hr": function () {
-                this.insert('---');
-            },
-            "fullScreen": function () {
-                this.cm.setOption("fullScreen", !this.cm.getOption("fullScreen"));
-            },
-            "exitFullScreen": function() {
-                if (this.cm.getOption("fullScreen")) this.cm.setOption("fullScreen", false);
-            }
-        },
+		/**
+		 * Default Tools in Toolbar
+		 * @todo - update so it's not so tightly coupled with Font Awesome.
+		 */
+		tools: [
+		  { name: "bold", action: "bold", className: "fa fa-bold" },
+		  { name: "italicize", action: "italicize", className: "fa fa-italic" },
+		  { name: "blockquote", action: "blockquote", className: "fa fa-quote-left" },
+		  { name: "strikethrough", action: "strikethrough", className: "fs fa-strikethrough" },
+		  { name: "link", action: "link", className: "fa fa-link" },
+		  { name: "image", action: "image", className: "fa fa-image" },
+		  { name: "unorderedList", action: "unorderedList", className: "fa fa-list" },
+		  { name: "orderedList", action: "orderedList", className: "fa fa-list-ol" },
+		  { name: "fullScreen", action: "fullScreen", className: "fa fa-expand" },
+		],
 
-        /**
-         * Insert a string at cursor position
-         * @param  {String} insertion
-         */
-        insert: function insert(insertion) {
-            var doc = this.cm.getDoc();
-            var cursor = doc.getCursor();
+		/**
+		 * Default Keymaps
+		 * @type {Object}
+		 */
+		keyMaps: {
+			"Cmd-B": 'bold',
+			"Cmd-I": 'italicize',
+			"Cmd-'": 'blockquote',
+			"Cmd-Alt-L": 'orderedList',
+			"Cmd-L": 'unorderedList',
+			"Cmd-Alt-I": 'image',
+			"Cmd-H": 'hr',
+			"Cmd-K": 'link',
+			"F11": "fullScreen",
+			"Esc": "exitFullScreen",
+		},
 
-            doc.replaceRange(insertion, { line: cursor.line, ch: cursor.ch });
-        },
+		/**
+		 * Default Actions
+		 * @type {Object}
+		 */
+		actions: {
+			bold: function () {
+				this.toggleAround('**', '**')
+			},
+			italicize: function () {
+				this.toggleAround('*', '*')
+			},
+			strikethrough: function () {
+				this.toggleAround('~~', '~~')
+			},
+			"code": function () {
+				this.toggleAround('```\r\n', '\r\n```')
+			},
+			"blockquote": function () {
+				this.toggleBefore('> ');
+			},
+			"orderedList": function () {
+				this.toggleBefore('1. ');
+			},
+			"unorderedList": function () {
+				this.toggleBefore('* ');
+			},
+			"image": function () {
+				this.toggleAround('![', '](http://)');
+			},
+			"link": function () {
+				this.toggleAround('[', '](http://)');
+			},
+			"hr": function () {
+				this.insert('---');
+			},
+			"fullScreen": function () {
+				this.cm.setOption("fullScreen", !this.cm.getOption("fullScreen"));
+			},
+			"exitFullScreen": function() {
+				if (this.cm.getOption("fullScreen")) this.cm.setOption("fullScreen", false);
+			}
+		},
 
-        /**
-         * Toggle a string at the start and end of a selection
-         * @param  {String} start Start string to wrap
-         * @param  {String} end  End string to wrap
-         */
-        toggleAround: function toggleAround(start, end) {
-            var doc = this.cm.getDoc();
-            var cursor = doc.getCursor();
+		/**
+		 * Insert a string at cursor position
+		 * @param  {String} insertion
+		 */
+		insert: function insert(insertion) {
+			var doc = this.cm.getDoc();
+			var cursor = doc.getCursor();
 
-            if (doc.somethingSelected()) {
-                var selection = doc.getSelection();
-                if(selection.startsWith(start) && selection.endsWith(end)) {
-                    doc.replaceSelection(selection.substring(start.length, selection.length - end.length), "around");
-                } else {
-                    doc.replaceSelection(start + selection + end, "around");
-                }
-            } else {
-                // If no selection then insert start and end args and set cursor position between the two.
-                doc.replaceRange(start + end, { line: cursor.line, ch: cursor.ch });
-                doc.setCursor({ line: cursor.line, ch: cursor.ch + start.length })
-            }
-        },
+			doc.replaceRange(insertion, { line: cursor.line, ch: cursor.ch });
+		},
 
-        /**
-         * Toggle a string before a selection
-         * @param {String} insertion    String to insert
-         */
-        toggleBefore: function toggleBefore(insertion) {
-            var doc = this.cm.getDoc();
-            var cursor = doc.getCursor();
+		/**
+		 * Toggle a string at the start and end of a selection
+		 * @param  {String} start Start string to wrap
+		 * @param  {String} end  End string to wrap
+		 */
+		toggleAround: function toggleAround(start, end) {
+			var doc = this.cm.getDoc();
+			var cursor = doc.getCursor();
 
-            if (doc.somethingSelected()) {
-                var selections = doc.listSelections();
-                var remove = null;
-                this.cm.operation(function() {
-                    selections.forEach(function(selection) {
-                        var pos = [selection.head.line, selection.anchor.line].sort();
+			if (doc.somethingSelected()) {
+				var selection = doc.getSelection();
+				if(selection.startsWith(start) && selection.endsWith(end)) {
+					doc.replaceSelection(selection.substring(start.length, selection.length - end.length), "around");
+				} else {
+					doc.replaceSelection(start + selection + end, "around");
+				}
+			} else {
+				// If no selection then insert start and end args and set cursor position between the two.
+				doc.replaceRange(start + end, { line: cursor.line, ch: cursor.ch });
+				doc.setCursor({ line: cursor.line, ch: cursor.ch + start.length })
+			}
+		},
 
-                        // Remove if the first text starts with it
-                        if(remove == null) {
-                            remove = doc.getLine(pos[0]).startsWith(insertion);
-                        }
+		/**
+		 * Toggle a string before a selection
+		 * @param {String} insertion	String to insert
+		 */
+		toggleBefore: function toggleBefore(insertion) {
+			var doc = this.cm.getDoc();
+			var cursor = doc.getCursor();
 
-                        for (var i = pos[0]; i <= pos[1]; i++) {
-                            if(remove) {
-                                // Don't remove if we don't start with it
-                                if(doc.getLine(i).startsWith(insertion)) {
-                                    doc.replaceRange("", { line: i, ch: 0 }, {line: i, ch: insertion.length});
-                                }
-                            } else {
-                                doc.replaceRange(insertion, { line: i, ch: 0 });
-                            }
-                        }
-                    });
-                });
-            } else {
-                var line = cursor.line;
-                if(doc.getLine(line).startsWith(insertion)) {
-                    doc.replaceRange("", { line: line, ch: 0 }, {line: line, ch: insertion.length});
-                } else {
-                    doc.replaceRange(insertion, { line: line, ch: 0 });
-                }
+			if (doc.somethingSelected()) {
+				var selections = doc.listSelections();
+				var remove = null;
+				this.cm.operation(function() {
+					selections.forEach(function(selection) {
+						var pos = [selection.head.line, selection.anchor.line].sort();
 
-            }
-        }
-    }
+						// Remove if the first text starts with it
+						if(remove == null) {
+							remove = doc.getLine(pos[0]).startsWith(insertion);
+						}
 
-    /**
-     * Our Factory
-     * @param  {Object} element
-     * @param  {Object} options
-     * @return {Object}
-     */
-    function mirrorMark(element, options) {
+						for (var i = pos[0]; i <= pos[1]; i++) {
+							if(remove) {
+								// Don't remove if we don't start with it
+								if(doc.getLine(i).startsWith(insertion)) {
+									doc.replaceRange("", { line: i, ch: 0 }, {line: i, ch: insertion.length});
+								}
+							} else {
+								doc.replaceRange(insertion, { line: i, ch: 0 });
+							}
+						}
+					});
+				});
+			} else {
+				var line = cursor.line;
+				if(doc.getLine(line).startsWith(insertion)) {
+					doc.replaceRange("", { line: line, ch: 0 }, {line: line, ch: insertion.length});
+				} else {
+					doc.replaceRange(insertion, { line: line, ch: 0 });
+				}
 
-        // Defaults
-        var defaults = {
-            mode: 'gfm',
-            theme: 'mirrormark',
-            tabSize: '2',
-            indentWithTabs: true,
-            lineWrapping: true,
-            autoCloseBrackets: true,
-            autoCloseTags: true,
-            showToolbar: true,
-            extraKeys: {
-                "Enter": 'newlineAndIndentContinueMarkdownList',
-            },
-        }
+			}
+		}
+	}
 
-        // Extend our defaults with the options provided
-        merge(defaults, options);
+	/**
+	 * Our Factory
+	 * @param  {Object} element
+	 * @param  {Object} options
+	 * @return {Object}
+	 */
+	function mirrorMark(element, options) {
 
-        return merge(Object.create(mirrorMarkProto), { element: element, options: defaults });
-    }
+		// Defaults
+		var defaults = {
+			mode: 'gfm',
+			theme: 'mirrormark',
+			tabSize: '2',
+			indentWithTabs: true,
+			lineWrapping: true,
+			autoCloseBrackets: true,
+			autoCloseTags: true,
+			showToolbar: true,
+			extraKeys: {
+				"Enter": 'newlineAndIndentContinueMarkdownList',
+			},
+		}
+
+		// Extend our defaults with the options provided
+		merge(defaults, options);
+
+		return merge(Object.create(mirrorMarkProto), { element: element, options: defaults });
+	}
 
 })(window.CodeMirror);

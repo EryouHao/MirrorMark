@@ -10,14 +10,14 @@
 }
 
 .cm-s-mirrormark .CodeMirror-scroll {
-    height: auto !important;
-    overflow: visible !important;
+	height: auto !important;
+	overflow: visible !important;
 	padding: 4%;
 	box-sizing: border-box;
 }
 
 .cm-s-mirrormark.CodeMirror-fullscreen .CodeMirror-scroll {
-    height: 100% !important;
+	height: 100% !important;
 	overflow: scroll !important;
 }
 
@@ -72,21 +72,21 @@
 	border-bottom: 1px solid rgba(0,0,0,0.1);
 	display: block;
 	width: 100%;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-left: 0;
+	padding-right: 0;
 }
 
 /* First level */
 .mirrormark-toolbar li {
-    display: inline-block;
-    position: relative;
-    z-index: 1
+	display: inline-block;
+	position: relative;
+	z-index: 1
 }
 
 .mirrormark-toolbar li.fullScreen {
-    float: right;
+	float: right;
 }
 
 .mirrormark-toolbar li a {

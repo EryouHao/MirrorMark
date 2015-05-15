@@ -87,16 +87,16 @@ var customTools = [{
 	action: null,
 	className: "fa fa-fighter-jet",
 	nested: [
-	    {
-    		name: "threeUp",
-    		action: "threeUp",
-    		showName: true
-    	},
-    	{
-    		name: "fourUp",
-    		action: "fourUp",
-    		showName: true
-    	}
+		{
+			name: "threeUp",
+			action: "threeUp",
+			showName: true
+		},
+		{
+			name: "fourUp",
+			action: "fourUp",
+			showName: true
+		}
 	]
 }];
 
