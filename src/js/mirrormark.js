@@ -142,12 +142,21 @@
 						this.cm.focus();
 					 	this.actions[tool.action].call(this);
 						if(tool.toggleClass) {
-							var find = new RegExp("(^ | )" + tool.className + "($ | )");
-							if(anchor.className.search(find) >= 0) {
-								anchor.className = anchor.className.replace(find, "") + " " + tool.toggleClass;
-							} else {
-								anchor.className = anchor.className.replace(new RegExp("(^ | )" + tool.toggleClass + "($ | )"), "") + " " + tool.className;
+
+							var classes = anchor.className.split(" "),
+							    remove = tool.className.split(" "),
+							    add = tool.toggleClass.split(" ");
+							add.push("active");
+
+							if(classes.indexOf("active") >= 0) {
+									var temp = add;
+									add = remove;
+									remove = temp;
 							}
+
+							classes = classes.filter(function(item) { return remove.indexOf(item) === -1; });
+							[].push.apply(classes, add);
+							anchor.className = classes.join(" ");
 						}
 
 					}.bind(this);
