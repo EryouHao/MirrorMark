@@ -23,6 +23,7 @@
       "font-awesome": "~4.3.0"
   },
   "devDependencies": {
-    "codemirror": "~5.0.0"
+    "codemirror": "~5.0.0",
+    "pagedown-extra": "*"
   }
 }

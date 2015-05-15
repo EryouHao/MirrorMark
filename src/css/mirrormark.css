@@ -12,7 +12,7 @@
 .cm-s-mirrormark .CodeMirror-scroll {
 	height: auto !important;
 	overflow: visible !important;
-	padding: 4%;
+	padding: 30px 4%;
 	box-sizing: border-box;
 }
 

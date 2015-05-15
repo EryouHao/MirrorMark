@@ -122,6 +122,6 @@ When instantiating the editor you can pass the various Codemirror options availa
 
 ## Things coming
 - [x] Windows support for Keymaps
-- [ ] Fullscreen editing (Partial - the toolbar is not displayed)
+- [x] Fullscreen editing
 - [ ] Preview mode
 - [ ] Status bar

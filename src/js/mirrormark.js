@@ -73,8 +73,7 @@
 			});
 
 			var cmWrapper = this.cm.getWrapperElement();
-				cmWrapper.parentNode.insertBefore(toolbar, cmWrapper);
-
+			cmWrapper.insertBefore(toolbar, cmWrapper.firstChild);
 		},
 
 		/**
