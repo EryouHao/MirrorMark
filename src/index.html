@@ -47,11 +47,10 @@ We have bullets: (Cmd-L)
 * Pew
 * and Pew!
 
-Fenced code blocks!
+Look how simple it is!
 ```javascript
-function a(thing) {
-	console.log(thing);
-}
+textarea1 = mirrorMark(document.getElementById("textarea1"), { autofocus: true });
+textarea1.render();
 ```
 
 [We have links](http://cdn.meme.am/instances/500x/54432752.jpg) (Cmd-K)
@@ -73,7 +72,7 @@ And everyone loves todo lists. Right?
 <div class="editor">
 <textarea id="textarea2">
 ## This is another textarea proving that we can have multiples.
-Also notice that there is no extra icons!
+Also notice those extra icons?
 </textarea>
 </div>
 </div>
@@ -138,12 +137,12 @@ Also notice that there is no extra icons!
 
 
 	textarea1 = mirrorMark(document.getElementById("textarea1"), { autofocus: true });
-	textarea1.registerActions(customActions);
-	textarea1.registerKeyMaps(customKeyMaps);
-	textarea1.registerTools(customTools);
 	textarea1.render();
 
 	textarea2 = mirrorMark(document.getElementById("textarea2"));
+	textarea2.registerActions(customActions);
+	textarea2.registerKeyMaps(customKeyMaps);
+	textarea2.registerTools(customTools);
 	textarea2.render();
 </script>
 </body>

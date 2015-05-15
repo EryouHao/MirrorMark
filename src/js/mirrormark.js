@@ -288,13 +288,18 @@
                 this.cm.operation(function() {
                     selections.forEach(function(selection) {
                         var pos = [selection.head.line, selection.anchor.line].sort();
+
+                        // Remove if the first text starts with it
                         if(remove == null) {
                             remove = doc.getLine(pos[0]).startsWith(insertion);
                         }
 
                         for (var i = pos[0]; i <= pos[1]; i++) {
                             if(remove) {
-                                doc.replaceRange("", { line: i, ch: 0 }, {line: i, ch: insertion.length});
+                                // Don't remove if we don't start with it
+                                if(doc.getLine(i).startsWith(insertion)) {
+                                    doc.replaceRange("", { line: i, ch: 0 }, {line: i, ch: insertion.length});
+                                }
                             } else {
                                 doc.replaceRange(insertion, { line: i, ch: 0 });
                             }

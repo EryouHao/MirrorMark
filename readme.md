@@ -1,6 +1,6 @@
 ## Overview
 
-MirrorMark is a simple, yet extensible Markdown editor created with [Codemirror](http://www.codemirror.net). 
+MirrorMark is a simple, yet extensible Markdown editor created with [Codemirror](http://www.codemirror.net).
 
 See [Demo](http://musicbed.github.io/MirrorMark/).
 
@@ -12,29 +12,23 @@ bower install mirrormark
 
 ## Dependencies
 * Codemirror
-* Lodash
 * Font Awesome (for toolbar icons)
 
 ### CSS
 
 ```
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.0.0/codemirror.css" rel="stylesheet" />
-<link href="./css/mirrormark.min.css" rel="stylesheet" />
+<link href="./css/mirrormark.package.min.css" rel="stylesheet" />
 ```
 * `mirrormark.css` contains the theme for the editor and toolbar. If you'd like to adjust the theme create your own `{theme}.css` file and namespace the selectors with your theme name.
-* You can load `codemirror.css` and `mirrormark.css` together by using `css/mirrormark.package.css` or just load them separately.
+* You can load always load each components' CSS individually.
 
 ### Javascript
 
 ```javascript
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.0.0/codemirror.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.0.0/addon/edit/continuelist.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.0.0/mode/markdown/markdown.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
-<script src="./js/mirrormark.min.js"></script>
+<script src="./js/mirrormark.package.min.js"></script>
 ```
-* You can load all of these together at once by using `js/mirrormark.package.min.js` or just load each piece separately depending on the situation.
+* If you are so inclined, you can just load `mirrormark.js` and CodeMirror separately
 
 ## Basic Usage
 ### HTML
@@ -83,24 +77,24 @@ var customActions = {
 	}
 }
 
-var customKeyMaps = { 
+var customKeyMaps = {
 	"Shift-Cmd-Alt-3": "threeUp",
 	"Shift-Cmd-Alt-4": "fourUp",
 };
 
-var customTools = [{ 
-	name: "threeUp", 
-	action: null, 
-	className: "fa fa-fighter-jet", 
+var customTools = [{
+	name: "threeUp",
+	action: null,
+	className: "fa fa-fighter-jet",
 	nested: [
-	    { 
-    		name: "threeUp", 
-    		action: "threeUp", 
+	    {
+    		name: "threeUp",
+    		action: "threeUp",
     		showName: true
     	},
     	{
-    		name: "fourUp", 
-    		action: "fourUp", 
+    		name: "fourUp",
+    		action: "fourUp",
     		showName: true
     	}
 	]
@@ -127,9 +121,7 @@ When instantiating the editor you can pass the various Codemirror options availa
 * ***this.insertAround(start, end)*** - Inserts a given string value at the start and end of a selection.
 
 ## Things coming
-* Windows support for Keymaps
-* Fullscreen editing
-* Preview mode
-* Status bar
-
-
+- [x] Windows support for Keymaps
+- [ ] Fullscreen editing (Partial - the toolbar is not displayed)
+- [ ] Preview mode
+- [ ] Status bar

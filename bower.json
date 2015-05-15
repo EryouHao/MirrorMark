@@ -19,8 +19,10 @@
     "test",
     "tests"
   ],
+  "dependencies": {
+      "font-awesome": "~4.3.0"
+  },
   "devDependencies": {
-    "codemirror": "~5.0.0",
-    "font-awesome": "~4.3.0"
+    "codemirror": "~5.0.0"
   }
 }
