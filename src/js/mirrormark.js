@@ -139,8 +139,17 @@
 
 				if (tool.action) {
 					anchor.onclick = function(e) {
-					  this.cm.focus();
-					  this.actions[tool.action].call(this);
+						this.cm.focus();
+					 	this.actions[tool.action].call(this);
+						if(tool.toggleClass) {
+							var find = new RegExp("(^ | )" + tool.className + "($ | )");
+							if(anchor.className.search(find) >= 0) {
+								anchor.className = anchor.className.replace(find, "") + " " + tool.toggleClass;
+							} else {
+								anchor.className = anchor.className.replace(new RegExp("(^ | )" + tool.toggleClass + "($ | )"), "") + " " + tool.className;
+							}
+						}
+
 					}.bind(this);
 				}
 
@@ -176,8 +185,8 @@
 			{ name: "image", action: "image", className: "fa fa-image" },
 			{ name: "unorderedList", action: "unorderedList", className: "fa fa-list" },
 			{ name: "orderedList", action: "orderedList", className: "fa fa-list-ol" },
-			{ name: "fullScreen", action: "fullScreen", className: "fa fa-expand" },
-			{ name: "preview", action: "preview", className: "fa fa-file" },
+			{ name: "fullScreen", action: "fullScreen", className: "fa fa-expand", toggleClass: "fa fa-compress" },
+			{ name: "preview", action: "preview", className: "fa fa-file", toggleClass: "fa fa-file-o" },
 		],
 
 		/**
