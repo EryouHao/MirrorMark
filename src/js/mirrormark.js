@@ -10,7 +10,7 @@
     (function(fn) {
         if (typeof exports == "object" && typeof module == "object") { // CommonJS
           module.exports = fn;
-        } else if (typeof define == "function" && define.amd) { // AMD 
+        } else if (typeof define == "function" && define.amd) { // AMD
           return define([], fn);
         }
 
@@ -19,11 +19,33 @@
     })(mirrorMark);
 
     /**
+     * Merge
+     *
+     *
+     * @param  {Object}        object The object to merge into
+     * @param  {Object/Array}  source The object or array of objects to merge
+     * @return {Object}         The original object
+     */
+    function merge(object, source) {
+        if(Array.isArray(source)) {
+            for(var i = sources.length - 1; i >= 0; i--) {
+                merge(object, source[i]);
+            }
+        } else {
+            for (var attrname in source) {
+                object[attrname] = source[attrname];
+            }
+        }
+
+        return object;
+    }
+
+    /**
      * Our delegate prototype used by our factory
      * @type {Object}
      */
     var mirrorMarkProto = {
-        
+
         /**
          * Render the component
          */
@@ -43,13 +65,13 @@
 
             var toolbar = document.createElement('ul');
                 toolbar.className = this.options.theme + '-' + 'toolbar';
-            
+
             var tools = this.generateToolList(tools);
 
             tools.forEach(function(tool) {
                 toolbar.appendChild(tool)
             });
-    
+
             var cmWrapper = this.cm.getWrapperElement();
                 cmWrapper.parentNode.insertBefore(toolbar, cmWrapper);
 
@@ -63,9 +85,8 @@
             for (var name in keyMaps) {
                 if (typeof(this.actions[keyMaps[name]]) !== 'function') throw "MirrorMark - '" + keyMaps[name] + "' is not a registered action";
 
-                var obj = {};
-                obj[name] = this.actions[keyMaps[name]].bind(this);
-                _.assign(this.options.extraKeys, obj);
+                var realName = name.replace("Cmd-", (CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault) ? "Cmd-" : "Ctrl-");
+                this.options.extraKeys[realName] = this.actions[keyMaps[name]].bind(this)
             }
         },
 
@@ -75,7 +96,7 @@
          * @param  {Object} actions [description]
          */
         registerActions: function registerActions(actions) {
-            return _.assign(this.actions, actions);
+            return merge(this.actions, actions);
         },
 
 
@@ -89,7 +110,7 @@
                 if (this.actions[tools[action].action] && typeof(this.actions[tools[action].action]) !== 'function') throw "MirrorMark - '" + tools[action].action + "' is not a registered action";
             }
 
-            if (replace) { 
+            if (replace) {
                 this.tools = tools;
                 return;
             }
@@ -103,7 +124,7 @@
          */
         generateToolList: function generateToolList(tools) {
             return tools.map(function(tool) {
-                var item = document.createElement("li"), 
+                var item = document.createElement("li"),
                     anchor = document.createElement("a");
 
                 item.className = tool.name;
@@ -142,7 +163,7 @@
 
             }.bind(this));
         },
-        
+
         /**
          * Default Tools in Toolbar
          * @todo - update so it's not so tightly coupled with Font Awesome.
@@ -151,6 +172,7 @@
           { name: "bold", action: "bold", className: "fa fa-bold" },
           { name: "italicize", action: "italicize", className: "fa fa-italic" },
           { name: "blockquote", action: "blockquote", className: "fa fa-quote-left" },
+          { name: "strikethrough", action: "strikethrough", className: "fs fa-strikethrough" },
           { name: "link", action: "link", className: "fa fa-link" },
           { name: "image", action: "image", className: "fa fa-image" },
           { name: "unorderedList", action: "unorderedList", className: "fa fa-list" },
@@ -159,7 +181,7 @@
         ],
 
         /**
-         * Default Keymaps 
+         * Default Keymaps
          * @type {Object}
          */
         keyMaps: {
@@ -170,7 +192,9 @@
             "Cmd-L": 'unorderedList',
             "Cmd-Alt-I": 'image',
             "Cmd-H": 'hr',
-            "Cmd-K": 'link'
+            "Cmd-K": 'link',
+            "F11": "fullScreen",
+            "Esc": "exitFullScreen",
         },
 
         /**
@@ -179,63 +203,40 @@
          */
         actions: {
             bold: function () {
-                this.insertAround('**', '**')
+                this.toggleAround('**', '**')
             },
             italicize: function () {
-                this.insertAround('*', '*')
+                this.toggleAround('*', '*')
+            },
+            strikethrough: function () {
+                this.toggleAround('~~', '~~')
             },
             "code": function () {
-                this.insertAround('```\r\n', '\r\n```')
+                this.toggleAround('```\r\n', '\r\n```')
             },
-            "blockquote": function () {                                     
-                this.insertBefore('> ', 2);
+            "blockquote": function () {
+                this.toggleBefore('> ', 2);
             },
-            "orderedList": function () {                                        
-                this.insertBefore('1. ', 3);
+            "orderedList": function () {
+                this.toggleBefore('1. ', 3);
             },
-            "unorderedList": function () {                                      
-                this.insertBefore('* ', 2);
+            "unorderedList": function () {
+                this.toggleBefore('* ', 2);
             },
-            "image": function () {                      
-                this.insertBefore('![](http://)', 2);
+            "image": function () {
+                this.toggleBefore('![](http://)', 2);
             },
-            "link": function () {                       
-                this.insertAround('[', '](http://)');
+            "link": function () {
+                this.toggleAround('[', '](http://)');
             },
-            "hr": function () {                     
+            "hr": function () {
                 this.insert('---');
             },
             "fullScreen": function () {
-              var el = this.cm.getWrapperElement();
-
-              // https://developer.mozilla.org/en-US/docs/DOM/Using_fullscreen_mode
-              var doc = document;
-              var isFull = doc.fullScreen || doc.mozFullScreen || doc.webkitFullScreen;
-              var request = function() {
-                if (el.requestFullscreen) {
-                    el.requestFullscreen();
-                } else if (el.webkitRequestFullscreen) {
-                    el.webkitRequestFullscreen();
-                } else if (el.mozRequestFullScreen) {
-                    el.mozRequestFullScreen();
-                } else if (el.msRequestFullscreen) {
-                    el.msRequestFullscreen();
-                }
-              }         
-              var cancel = function() {
-                if (doc.cancelFullScreen) {
-                  doc.cancelFullScreen();
-                } else if (doc.mozCancelFullScreen) {
-                  doc.mozCancelFullScreen();
-                } else if (doc.webkitCancelFullScreen) {
-                  doc.webkitCancelFullScreen();
-                }
-              };
-              if (!isFull) {
-                request();
-              } else if (cancel) {
-                cancel();
-              }
+                this.cm.setOption("fullScreen", !this.cm.getOption("fullScreen"));
+            },
+            "exitFullScreen": function() {
+                if (this.cm.getOption("fullScreen")) this.cm.setOption("fullScreen", false);
             }
         },
 
@@ -251,17 +252,21 @@
         },
 
         /**
-         * Insert a string at the start and end of a selection 
+         * Toggle a string at the start and end of a selection
          * @param  {String} start
-         * @param  {String} end   
+         * @param  {String} end
          */
-        insertAround: function insertAround(start, end) {
+        toggleAround: function toggleAround(start, end) {
             var doc = this.cm.getDoc();
             var cursor = doc.getCursor();
 
             if (doc.somethingSelected()) {
                 var selection = doc.getSelection();
-                doc.replaceSelection(start + selection + end);
+                if(selection.startsWith(start) && selection.endsWith(end)) {
+                    doc.replaceSelection(selection.substring(start.length, selection.length - end.length), "around");
+                } else {
+                    doc.replaceSelection(start + selection + end, "around");
+                }
             } else {
                 // If no selection then insert start and end args and set cursor position between the two.
                 doc.replaceRange(start + end, { line: cursor.line, ch: cursor.ch });
@@ -270,10 +275,10 @@
         },
 
         /**
-         * Insert a string before a selection
+         * Toggle a string before a selection
          * @param  {String} insertion
          */
-        insertBefore: function insertBefore(insertion, cursorOffset) {
+        toggleBefore: function toggleBefore(insertion, cursorOffset) {
             var doc = this.cm.getDoc();
             var cursor = doc.getCursor();
 
@@ -305,20 +310,23 @@
 
         // Defaults
         var defaults = {
+            mode: 'gfm',
             theme: 'mirrormark',
             tabSize: '2',
             indentWithTabs: true,
             lineWrapping: true,
+            autoCloseBrackets: true,
+            autoCloseTags: true,
+            showToolbar: true,
             extraKeys: {
                 "Enter": 'newlineAndIndentContinueMarkdownList',
             },
-            mode: 'markdown'
         }
 
         // Extend our defaults with the options provided
-        _.assign(defaults, options);
+        merge(defaults, options);
 
-        return _.assign(Object.create(mirrorMarkProto), { element: element, options: defaults });
+        return merge(Object.create(mirrorMarkProto), { element: element, options: defaults });
     }
 
 })(window.CodeMirror);

@@ -1,4 +1,5 @@
 /* Custom 'mirrormark' CodeMirror Theme */
+
 .cm-s-mirrormark {
   font: 16px/1.7 Menlo, Consolas, Monaco, 'Andale Mono', monospace;
   box-sizing: border-box;
@@ -14,6 +15,13 @@
 	padding: 4%;
 	box-sizing: border-box;
 }
+
+.cm-s-mirrormark.CodeMirror-fullscreen .CodeMirror-scroll {
+    height: 100% !important;
+	overflow: scroll !important;
+}
+
+.cm-s-mirrormark pre.CodeMirror-placeholder { color: #999; }
 
 .cm-s-mirrormark .cm-header-1 {
   font: 28px Menlo, Consolas, Monaco, 'Andale Mono', monospace;
@@ -36,6 +44,27 @@
 .cm-s-mirrormark .cm-string {
   color: #888;
 }
+
+/* Default theme */
+.cm-s-mirrormark .cm-keyword {color: #708;}
+.cm-s-mirrormark .cm-atom {color: #219;}
+.cm-s-mirrormark .cm-number {color: #164;}
+.cm-s-mirrormark .cm-def {color: #00f;}
+.cm-s-mirrormark .cm-variable,
+.cm-s-mirrormark .cm-punctuation,
+.cm-s-mirrormark .cm-property,
+.cm-s-mirrormark .cm-operator {}
+.cm-s-mirrormark .cm-variable-2 {color: #05a;}
+.cm-s-mirrormark .cm-variable-3 {color: #085;}
+.cm-s-mirrormark .cm-comment {color: #a50;}
+.cm-s-mirrormark .cm-string-2 {color: #f50;}
+.cm-s-mirrormark .cm-meta {color: #555;}
+.cm-s-mirrormark .cm-qualifier {color: #555;}
+.cm-s-mirrormark .cm-builtin {color: #30a;}
+.cm-s-mirrormark .cm-bracket {color: #997;}
+.cm-s-mirrormark .cm-tag {color: #170;}
+.cm-s-mirrormark .cm-attribute {color: #00c;}
+
 
 /* Toolbar Theme */
 .mirrormark-toolbar {
@@ -121,20 +150,4 @@
 
 .mirrormark-toolbar ul li:hover a {
 	color: black !important;
-}
-
-/* Fullscreen Mode */
-:-webkit-full-screen {
-	width: 100% !important;
-	height: 100% !important;
-}
-
-:-moz-full-screen .CodeMirror-scroll {
-	height: 100% !important;
-	overflow: scroll !important;
-}
-
-:-webkit-full-screen .CodeMirror-scroll {
-	height: 100% !important;
-	overflow: scroll !important;
 }

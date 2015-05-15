@@ -14,9 +14,42 @@ var SRC = './src/',
     DIST = './dist/',
     BOWER = './bower_components/';
 
+var languages = [
+    'markdown',
+    'gfm',
+
+    // Syntax highlighting
+    'clike',
+    'css',
+    'htmlmixed',
+    'javascript',
+    'lua',
+    'xml',
+];
+
+var addons = [
+    "display/fullscreen", // Fullscreen support
+    'edit/continuelist', // Nicer lists
+    'mode/overlay',     // Required for GFM
+    "comment/comment",
+
+    "display/placeholder", // Pretty placeholder
+
+    // Useful for code blocks
+    "edit/closebrackets",
+    "edit/closetag",
+
+    // Find and replace
+    "dialog/dialog",
+    "scroll/annotatescrollbar",
+    "search/matchesonscrollbar",
+    "search/search",
+    "search/searchcursor",
+];
+
 gulp.task('dist-clean', function() {
     return gulp.src(DIST).pipe(clean());
-    })
+});
 
 gulp.task('copyFiles', function() {
     return gulp.src([
@@ -25,31 +58,41 @@ gulp.task('copyFiles', function() {
     		SRC + 'index.html',
     	])
         .pipe(gulp.dest(DIST));
-    });
+});
 
 gulp.task('packagecss', function() {
-    return gulp.src([ 
-            BOWER + 'codemirror/lib/codemirror.css',
-    		SRC + 'css/mirrormark.css'
-    	])
+    var files = [
+        BOWER + 'codemirror/lib/codemirror.css',
+		SRC + 'css/mirrormark.css'
+	];
+    [].push.apply(files, addons.map(function(path) {
+        return BOWER + "codemirror/addon/" + path + ".css";
+    }));
+
+    return gulp.src(files)
     	.pipe(concat('mirrormark.package.css'))
         .pipe(gulp.dest(DIST + 'css'));
-    });
+});
 
 gulp.task('packagejs', function() {
-    return gulp.src([ 
-            BOWER + 'codemirror/lib/codemirror.js',
-            BOWER + 'codemirror/mode/markdown/markdown.js',
-            BOWER + 'codemirror/mode/edit/continuelist.js',
-            BOWER + 'lodash/lodash.js',
-            SRC + 'js/mirrormark.js'
-        ])
+    var files = [
+        BOWER + 'codemirror/lib/codemirror.js',
+        SRC + 'js/mirrormark.js',
+    ];
+    [].push.apply(files, languages.map(function(path) {
+        return BOWER + "codemirror/mode/" + path + "/" + path + ".js";
+    }));
+    [].push.apply(files, addons.map(function(path) {
+        return BOWER + "codemirror/addon/" + path + ".js";
+    }));
+
+    return gulp.src(files)
         .pipe(concat('mirrormark.package.js'))
         .pipe(gulp.dest(DIST + 'js'));
-    });
+});
 
 gulp.task('minifycss', function() {
-    return gulp.src([ 
+    return gulp.src([
             DIST + 'css/demo.css',
             DIST + 'css/codemirror.css',
             DIST + 'css/mirrormark.css',
@@ -60,7 +103,7 @@ gulp.task('minifycss', function() {
     		suffix: '.min'
     	}))
         .pipe(gulp.dest(DIST + 'css'));
-    });
+});
 
 gulp.task('minifyjs', function() {
     return gulp.src(DIST + 'js/*.js')
@@ -69,7 +112,7 @@ gulp.task('minifyjs', function() {
             suffix: '.min'
         }))
         .pipe(gulp.dest(DIST + 'js'));
-    });
+});
 
 
 /**
