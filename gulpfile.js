@@ -63,7 +63,8 @@ gulp.task('copyFiles', function() {
 gulp.task('packagecss', function() {
 	var files = [
 		BOWER + 'codemirror/lib/codemirror.css',
-		SRC + 'css/mirrormark.css'
+		SRC + 'css/mirrormark.css',
+		SRC + 'css/preview.css',
 	];
 	[].push.apply(files, addons.map(function(path) {
 		return BOWER + "codemirror/addon/" + path + ".css";
@@ -77,7 +78,13 @@ gulp.task('packagecss', function() {
 gulp.task('packagejs', function() {
 	var files = [
 		BOWER + 'codemirror/lib/codemirror.js',
+
+		// Preview
+		BOWER + 'pagedown-extra/pagedown/Markdown.Converter.js',
+		BOWER + 'pagedown-extra/Markdown.Extra.js',
+
 		SRC + 'js/mirrormark.js',
+		SRC + 'js/preview.js',
 	];
 	[].push.apply(files, languages.map(function(path) {
 		return BOWER + "codemirror/mode/" + path + "/" + path + ".js";

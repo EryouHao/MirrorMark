@@ -64,7 +64,7 @@
 		setToolbar: function setToolbar(tools) {
 
 			var toolbar = document.createElement('ul');
-				toolbar.className = this.options.theme + '-' + 'toolbar';
+			toolbar.className = this.options.theme + '-' + 'toolbar';
 
 			var tools = this.generateToolList(tools);
 
@@ -168,15 +168,16 @@
 		 * @todo - update so it's not so tightly coupled with Font Awesome.
 		 */
 		tools: [
-		  { name: "bold", action: "bold", className: "fa fa-bold" },
-		  { name: "italicize", action: "italicize", className: "fa fa-italic" },
-		  { name: "blockquote", action: "blockquote", className: "fa fa-quote-left" },
-		  { name: "strikethrough", action: "strikethrough", className: "fs fa-strikethrough" },
-		  { name: "link", action: "link", className: "fa fa-link" },
-		  { name: "image", action: "image", className: "fa fa-image" },
-		  { name: "unorderedList", action: "unorderedList", className: "fa fa-list" },
-		  { name: "orderedList", action: "orderedList", className: "fa fa-list-ol" },
-		  { name: "fullScreen", action: "fullScreen", className: "fa fa-expand" },
+			{ name: "bold", action: "bold", className: "fa fa-bold" },
+			{ name: "italicize", action: "italicize", className: "fa fa-italic" },
+			{ name: "blockquote", action: "blockquote", className: "fa fa-quote-left" },
+			{ name: "strikethrough", action: "strikethrough", className: "fs fa-strikethrough" },
+			{ name: "link", action: "link", className: "fa fa-link" },
+			{ name: "image", action: "image", className: "fa fa-image" },
+			{ name: "unorderedList", action: "unorderedList", className: "fa fa-list" },
+			{ name: "orderedList", action: "orderedList", className: "fa fa-list-ol" },
+			{ name: "fullScreen", action: "fullScreen", className: "fa fa-expand" },
+			{ name: "preview", action: "preview", className: "fa fa-file" },
 		],
 
 		/**
@@ -236,6 +237,9 @@
 			},
 			"exitFullScreen": function() {
 				if (this.cm.getOption("fullScreen")) this.cm.setOption("fullScreen", false);
+			},
+			"preview": function() {
+				this.cm.setOption("preview", !this.cm.getOption("preview"));
 			}
 		},
 

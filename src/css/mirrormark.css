@@ -78,6 +78,10 @@
 	padding-right: 0;
 }
 
+.CodeMirror-fullscreen .mirrormark-toolbar {
+    padding-right: 10px;
+}
+
 /* First level */
 .mirrormark-toolbar li {
 	display: inline-block;
@@ -85,7 +89,8 @@
 	z-index: 1
 }
 
-.mirrormark-toolbar li.fullScreen {
+.mirrormark-toolbar li.fullScreen,
+.mirrormark-toolbar li.preview {
 	float: right;
 }
 
