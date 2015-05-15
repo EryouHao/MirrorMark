@@ -215,16 +215,16 @@
                 this.toggleAround('```\r\n', '\r\n```')
             },
             "blockquote": function () {
-                this.toggleBefore('> ', 2);
+                this.toggleBefore('> ');
             },
             "orderedList": function () {
-                this.toggleBefore('1. ', 3);
+                this.toggleBefore('1. ');
             },
             "unorderedList": function () {
-                this.toggleBefore('* ', 2);
+                this.toggleBefore('* ');
             },
             "image": function () {
-                this.toggleBefore('![](http://)', 2);
+                this.toggleAround('![', '](http://)');
             },
             "link": function () {
                 this.toggleAround('[', '](http://)');
@@ -253,8 +253,8 @@
 
         /**
          * Toggle a string at the start and end of a selection
-         * @param  {String} start
-         * @param  {String} end
+         * @param  {String} start Start string to wrap
+         * @param  {String} end  End string to wrap
          */
         toggleAround: function toggleAround(start, end) {
             var doc = this.cm.getDoc();
@@ -276,26 +276,39 @@
 
         /**
          * Toggle a string before a selection
-         * @param  {String} insertion
+         * @param {String} insertion    String to insert
          */
-        toggleBefore: function toggleBefore(insertion, cursorOffset) {
+        toggleBefore: function toggleBefore(insertion) {
             var doc = this.cm.getDoc();
             var cursor = doc.getCursor();
 
             if (doc.somethingSelected()) {
                 var selections = doc.listSelections();
-                selections.forEach(function(selection) {
-                    var pos = [selection.head.line, selection.anchor.line].sort();
+                var remove = null;
+                this.cm.operation(function() {
+                    selections.forEach(function(selection) {
+                        var pos = [selection.head.line, selection.anchor.line].sort();
+                        if(remove == null) {
+                            remove = doc.getLine(pos[0]).startsWith(insertion);
+                        }
 
-                    for (var i = pos[0]; i <= pos[1]; i++) {
-                        doc.replaceRange(insertion, { line: i, ch: 0 });
-                    }
-
-                    doc.setCursor({ line: pos[0], ch: cursorOffset || 0 });
+                        for (var i = pos[0]; i <= pos[1]; i++) {
+                            if(remove) {
+                                doc.replaceRange("", { line: i, ch: 0 }, {line: i, ch: insertion.length});
+                            } else {
+                                doc.replaceRange(insertion, { line: i, ch: 0 });
+                            }
+                        }
+                    });
                 });
             } else {
-                doc.replaceRange(insertion, { line: cursor.line, ch: 0 });
-                doc.setCursor({ line: cursor.line, ch: cursorOffset || 0 })
+                var line = cursor.line;
+                if(doc.getLine(line).startsWith(insertion)) {
+                    doc.replaceRange("", { line: line, ch: 0 }, {line: line, ch: insertion.length});
+                } else {
+                    doc.replaceRange(insertion, { line: line, ch: 0 });
+                }
+
             }
         }
     }
