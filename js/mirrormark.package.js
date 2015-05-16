@@ -11106,24 +11106,6 @@ else
 					anchor.onclick = function(e) {
 						this.cm.focus();
 					 	this.actions[tool.action].call(this);
-						if(tool.toggleClass) {
-
-							var classes = anchor.className.split(" "),
-							    remove = tool.className.split(" "),
-							    add = tool.toggleClass.split(" ");
-							add.push("active");
-
-							if(classes.indexOf("active") >= 0) {
-									var temp = add;
-									add = remove;
-									remove = temp;
-							}
-
-							classes = classes.filter(function(item) { return remove.indexOf(item) === -1; });
-							[].push.apply(classes, add);
-							anchor.className = classes.join(" ");
-						}
-
 					}.bind(this);
 				}
 
@@ -11148,19 +11130,18 @@ else
 
 		/**
 		 * Default Tools in Toolbar
-		 * @todo - update so it's not so tightly coupled with Font Awesome.
 		 */
 		tools: [
-			{ name: "bold", action: "bold", className: "fa fa-bold" },
-			{ name: "italicize", action: "italicize", className: "fa fa-italic" },
-			{ name: "blockquote", action: "blockquote", className: "fa fa-quote-left" },
-			{ name: "strikethrough", action: "strikethrough", className: "fs fa-strikethrough" },
-			{ name: "link", action: "link", className: "fa fa-link" },
-			{ name: "image", action: "image", className: "fa fa-image" },
-			{ name: "unorderedList", action: "unorderedList", className: "fa fa-list" },
-			{ name: "orderedList", action: "orderedList", className: "fa fa-list-ol" },
-			{ name: "fullScreen", action: "fullScreen", className: "fa fa-expand", toggleClass: "fa fa-compress" },
-			{ name: "preview", action: "preview", className: "fa fa-file", toggleClass: "fa fa-file-o" },
+			{ name: "bold", action: "bold" },
+			{ name: "italicize", action: "italicize" },
+			{ name: "blockquote", action: "blockquote" },
+			{ name: "strikethrough", action: "strikethrough" },
+			{ name: "link", action: "link" },
+			{ name: "image", action: "image" },
+			{ name: "unorderedList", action: "unorderedList" },
+			{ name: "orderedList", action: "orderedList" },
+			{ name: "fullScreen", action: "fullScreen" },
+			{ name: "preview", action: "preview" },
 		],
 
 		/**

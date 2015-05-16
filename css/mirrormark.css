@@ -61,6 +61,74 @@
 .cm-s-mirrormark .cm-attribute {
   color: #00c;
 }
+.cm-s-mirrormark.CodeMirror.CodeMirror-has-preview .CodeMirror-scroll {
+  display: none;
+}
+.cm-s-mirrormark.CodeMirror.CodeMirror-has-preview .CodeMirror-preview {
+  display: block;
+}
+.cm-s-mirrormark.CodeMirror .CodeMirror-preview {
+  display: none;
+  height: auto !important;
+  overflow: visible !important;
+  padding: 30px 4%;
+  box-sizing: border-box;
+}
+.cm-s-mirrormark.CodeMirror .CodeMirror-fullscreen .CodeMirror-preview {
+  height: 100% !important;
+  overflow: scroll !important;
+}
+.mirrormark-toolbar li > a {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translate(0, 0);
+}
+.mirrormark-toolbar li > a.pull-left {
+  margin-right: .3em;
+}
+.mirrormark-toolbar li > a.pull-right {
+  margin-left: .3em;
+}
+.mirrormark-toolbar .bold a:before {
+  content: "\f032";
+}
+.mirrormark-toolbar .italicize a:before {
+  content: "\f033";
+}
+.mirrormark-toolbar .blockquote a:before {
+  content: "\f10d";
+}
+.mirrormark-toolbar .strikethrough a:before {
+  content: "\f0cc";
+}
+.mirrormark-toolbar .link a:before {
+  content: "\f0c1";
+}
+.mirrormark-toolbar .image a:before {
+  content: "\f03e";
+}
+.mirrormark-toolbar .unorderedList a:before {
+  content: "\f03a";
+}
+.mirrormark-toolbar .orderedList a:before {
+  content: "\f0cb";
+}
+.mirrormark-toolbar .fullScreen a:before {
+  content: "\f065";
+}
+.mirrormark-toolbar .preview a:before {
+  content: "\f15b";
+}
+.cm-s-mirrormark.CodeMirror-fullscreen .mirrormark-toolbar .fullScreen a:before {
+  content: "\f066";
+}
+.cm-s-mirrormark.CodeMirror-has-preview .mirrormark-toolbar .preview a:before {
+  content: "\f016";
+}
 /* Toolbar Theme */
 .mirrormark-toolbar {
   background: #fff;
@@ -135,23 +203,6 @@
 }
 .mirrormark-toolbar li ul li:hover a {
   color: black !important;
-}
-.cm-s-mirrormark.CodeMirror.CodeMirror-has-preview .CodeMirror-scroll {
-  display: none;
-}
-.cm-s-mirrormark.CodeMirror.CodeMirror-has-preview .CodeMirror-preview {
-  display: block;
-}
-.cm-s-mirrormark.CodeMirror .CodeMirror-preview {
-  display: none;
-  height: auto !important;
-  overflow: visible !important;
-  padding: 30px 4%;
-  box-sizing: border-box;
-}
-.cm-s-mirrormark.CodeMirror .CodeMirror-fullscreen .CodeMirror-preview {
-  height: 100% !important;
-  overflow: scroll !important;
 }
 .cm-s-mirrormark {
   font: 16px/1.7 Menlo, Consolas, Monaco, 'Andale Mono', monospace;
