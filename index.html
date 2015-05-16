@@ -3,15 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<title>MirrorMark - Simple, yet extensible.</title>
-	<!-- Reset and custom fonts -->
-	<link href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css' rel='stylesheet' type='text/css'>
+	<!-- Custom fonts -->
 	<link href='http://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
-	
+
 	<!-- These three are required -->
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.0.0/codemirror.css" rel="stylesheet" />
-	<link href="./css/mirrormark.css" rel="stylesheet" />
-	
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<link href="./css/mirrormark.package.css" rel="stylesheet" />
+
 	<!-- Our demo CSS -->
 	<link href="./css/demo.css" rel="stylesheet" />
 </head>
@@ -23,7 +21,7 @@
 </div>
 <div class="wrap bgg1">
 <div class="editor">
-<textarea id="textarea1">
+<textarea id="textarea1" placeholder="things">
 # This is a main heading
 ## This is a sub heading
 ### This is a sub sub heading
@@ -32,23 +30,37 @@ This is a normal Paragraph for bald headed people with no beards.
 
 **This text is bold** (Cmd-B)
 *Italicized* for you Italians (Cmd-I)
+~~Strikethrough~~ for those who like it!
 
 > and this is a Blockquote (Cmd-')
 
 We have lists: (Cmd-Alt-L)
+
 1. Here
 2. Here
 3. and Here
 
-We have bullets: (Cmd-L) 
+We have bullets: (Cmd-L)
+
 * Pew
 * Pew
 * and Pew!
+
+Look how simple it is!
+```javascript
+textarea1 = mirrorMark(document.getElementById("textarea1"), { autofocus: true });
+textarea1.render();
+```
 
 [We have links](http://cdn.meme.am/instances/500x/54432752.jpg) (Cmd-K)
 
 We even have images (Cmd-Alt-I)
 ![Markdown Everywhere](http://troll.me/images/toy-story-everywhere/markdown-markdown-everywhere.jpg)
+
+And everyone loves todo lists. Right?
+
+- [ ] Need to do
+- [x] Done!
 </textarea>
 </div>
 </div>
@@ -59,6 +71,7 @@ We even have images (Cmd-Alt-I)
 <div class="editor">
 <textarea id="textarea2">
 ## This is another textarea proving that we can have multiples.
+Also notice those extra icons?
 </textarea>
 </div>
 </div>
@@ -68,11 +81,7 @@ We even have images (Cmd-Alt-I)
 </div>
 
 <!-- These are all required -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.0.0/codemirror.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.0.0/addon/edit/continuelist.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.0.0/mode/markdown/markdown.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
-<script src="./js/mirrormark.js"></script>
+<script src="./js/mirrormark.package.js"></script>
 
 <script>
 	/*
@@ -103,36 +112,36 @@ We even have images (Cmd-Alt-I)
 		}
 	}
 
-	var customKeyMaps = { 
+	var customKeyMaps = {
 		"Shift-Cmd-Alt-3": "threeUp",
 		"Shift-Cmd-Alt-4": "fourUp",
 	};
-	
-	var customTools = [{ 
-		name: "threeUp", 
-		action: null, 
-		className: "fa fa-fighter-jet", 
-		nested: [{ 
-			name: "threeUp", 
-			action: "threeUp", 
+
+	var customTools = [{
+		name: "threeUp",
+		action: null,
+		className: "fa fa-fighter-jet",
+		nested: [{
+			name: "threeUp",
+			action: "threeUp",
 			showName: true
 		},
 		{
-			name: "fourUp", 
-			action: "fourUp", 
+			name: "fourUp",
+			action: "fourUp",
 			showName: true
 		}
 		]
 	}];
 
 
-	textarea1 = mirrorMark(document.getElementById("textarea1"), { autofocus: true, showToolbar: true });
-	textarea1.registerActions(customActions);
-	textarea1.registerKeyMaps(customKeyMaps);
-	textarea1.registerTools(customTools);
+	textarea1 = mirrorMark(document.getElementById("textarea1"), { autofocus: true });
 	textarea1.render();
 
-	textarea2 = mirrorMark(document.getElementById("textarea2"), { showToolbar: true });
+	textarea2 = mirrorMark(document.getElementById("textarea2"));
+	textarea2.registerActions(customActions);
+	textarea2.registerKeyMaps(customKeyMaps);
+	textarea2.registerTools(customTools);
 	textarea2.render();
 </script>
 </body>

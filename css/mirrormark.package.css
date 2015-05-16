@@ -319,143 +319,228 @@ div.CodeMirror-cursors {
 /* Help users use markselection to safely style text background */
 span.CodeMirror-selectedtext { background: none; }
 
-/* Custom 'mirrormark' CodeMirror Theme */
 .cm-s-mirrormark {
-  font: 16px/1.7 Menlo, Consolas, Monaco, 'Andale Mono', monospace;
-  box-sizing: border-box;
-  height: auto;
-  margin: auto;
-  position: relative;
-  z-index: 0
+  /* Default theme */
 }
-
-.cm-s-mirrormark .CodeMirror-scroll {
-    height: auto !important;
-    overflow: visible !important;
-	padding: 4%;
-	box-sizing: border-box;
-}
-
 .cm-s-mirrormark .cm-header-1 {
   font: 28px Menlo, Consolas, Monaco, 'Andale Mono', monospace;
-  font-weight:  bold;
+  font-weight: bold;
 }
-
 .cm-s-mirrormark .cm-header-2 {
   font: 22px Menlo, Consolas, Monaco, 'Andale Mono', monospace;
   font-weight: bold;
 }
-
 .cm-s-mirrormark .cm-header-2 {
   font: 18px Menlo, Consolas, Monaco, 'Andale Mono', monospace;
   font-weight: bold;
 }
-
 .cm-s-mirrormark .cm-quote,
 .cm-s-mirrormark .cm-link,
 .cm-s-mirrormark .cm-tag,
 .cm-s-mirrormark .cm-string {
   color: #888;
 }
-
+.cm-s-mirrormark .cm-keyword {
+  color: #708;
+}
+.cm-s-mirrormark .cm-atom {
+  color: #219;
+}
+.cm-s-mirrormark .cm-number {
+  color: #164;
+}
+.cm-s-mirrormark .cm-def {
+  color: #00f;
+}
+.cm-s-mirrormark .cm-variable-2 {
+  color: #05a;
+}
+.cm-s-mirrormark .cm-variable-3 {
+  color: #085;
+}
+.cm-s-mirrormark .cm-comment {
+  color: #a50;
+}
+.cm-s-mirrormark .cm-string-2 {
+  color: #f50;
+}
+.cm-s-mirrormark .cm-meta {
+  color: #555;
+}
+.cm-s-mirrormark .cm-qualifier {
+  color: #555;
+}
+.cm-s-mirrormark .cm-builtin {
+  color: #30a;
+}
+.cm-s-mirrormark .cm-bracket {
+  color: #997;
+}
+.cm-s-mirrormark .cm-tag {
+  color: #170;
+}
+.cm-s-mirrormark .cm-attribute {
+  color: #00c;
+}
 /* Toolbar Theme */
 .mirrormark-toolbar {
-	background: #fff;
-	border-bottom: 1px solid rgba(0,0,0,0.1);
-	display: block;
-	width: 100%;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: block;
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  /* First level */
 }
-
-/* First level */
 .mirrormark-toolbar li {
-    display: inline-block;
-    position: relative;
-    z-index: 1
+  display: inline-block;
+  position: relative;
+  z-index: 1;
 }
-
-.mirrormark-toolbar li.fullScreen {
-    float: right;
+.mirrormark-toolbar li.fullScreen,
+.mirrormark-toolbar li.preview {
+  float: right;
 }
-
-.mirrormark-toolbar li a {
-	background-color: #fff;
-	color: #888;
-	cursor: pointer;
-	display: block;
-	font-size: 16px;
-	height: 40px;
-	line-height: 40px;
-	text-align: center;
-	transition: color .2s linear;
-	width: 40px;
-}
-
 .mirrormark-toolbar li.has-nested:after {
-	content: '\2304';
-	color: #888;
-	position: absolute;
-	bottom: 3px;
-	right: 3px;
-	font-size: 11px;
-	transform:scale(1.3, 1)
+  content: '\2304';
+  color: #888;
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  font-size: 11px;
+  transform: scale(1.3, 1);
 }
-
+.mirrormark-toolbar li a {
+  background-color: #fff;
+  color: #888;
+  cursor: pointer;
+  display: block;
+  font-size: 16px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  transition: color .2s linear;
+  width: 40px;
+}
 .mirrormark-toolbar li:hover a,
-.mirrormark-toolbar li.has-nested:hover:after {
-	color: #000;
+.mirrormark-toolbar li:hover.has-nested:after {
+  color: #000;
 }
-
 .mirrormark-toolbar li:hover ul {
-	display: block;
+  display: block;
+}
+.mirrormark-toolbar li ul {
+  background: #e5e5e5;
+  display: none;
+  position: absolute;
+  top: 41px;
+  width: 150px;
+  z-index: 1000;
+}
+.mirrormark-toolbar li ul li {
+  float: none;
+  width: 100%;
+}
+.mirrormark-toolbar li ul li a {
+  background: transparent;
+  color: #888 !important;
+  font-family: "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  height: auto;
+  line-height: normal;
+  padding: .25rem .75rem;
+  text-align: left;
+  width: auto;
+}
+.mirrormark-toolbar li ul li:hover a {
+  color: black !important;
+}
+.cm-s-mirrormark.CodeMirror.CodeMirror-has-preview .CodeMirror-scroll {
+  display: none;
+}
+.cm-s-mirrormark.CodeMirror.CodeMirror-has-preview .CodeMirror-preview {
+  display: block;
+}
+.cm-s-mirrormark.CodeMirror .CodeMirror-preview {
+  display: none;
+  height: auto !important;
+  overflow: visible !important;
+  padding: 30px 4%;
+  box-sizing: border-box;
+}
+.cm-s-mirrormark.CodeMirror .CodeMirror-fullscreen .CodeMirror-preview {
+  height: 100% !important;
+  overflow: scroll !important;
+}
+.cm-s-mirrormark {
+  font: 16px/1.7 Menlo, Consolas, Monaco, 'Andale Mono', monospace;
+  box-sizing: border-box;
+  height: auto;
+  margin: auto;
+  position: relative;
+  z-index: 0;
+}
+.cm-s-mirrormark .CodeMirror-scroll {
+  height: auto !important;
+  overflow: visible !important;
+  padding: 30px 4%;
+  box-sizing: border-box;
+}
+.cm-s-mirrormark.CodeMirror-fullscreen .CodeMirror-scroll {
+  height: 100% !important;
+  overflow: scroll !important;
+}
+.cm-s-mirrormark pre.CodeMirror-placeholder {
+  color: #999;
 }
 
-/* Second Level */
-.mirrormark-toolbar ul {
-	background: #e5e5e5;
-	display: none;
-	position: absolute;
-	top: 41px;
-	width: 150px;
-	z-index: 1000;
+.CodeMirror-fullscreen {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  height: auto;
+  z-index: 9;
 }
 
-.mirrormark-toolbar ul li {
-	float: none;
-	width: 100%;
+.CodeMirror-dialog {
+  position: absolute;
+  left: 0; right: 0;
+  background: white;
+  z-index: 15;
+  padding: .1em .8em;
+  overflow: hidden;
+  color: #333;
 }
 
-.mirrormark-toolbar ul li a {
-	background: transparent;
-	color: #888 !important;
-	font-family: "Helvetica Neue", sans-serif;
-	font-size: 12px;
-	height: auto;
-	line-height: normal;
-	padding: .25rem .75rem;
-	text-align: left;
-	width: auto;
+.CodeMirror-dialog-top {
+  border-bottom: 1px solid #eee;
+  top: 0;
 }
 
-.mirrormark-toolbar ul li:hover a {
-	color: black !important;
+.CodeMirror-dialog-bottom {
+  border-top: 1px solid #eee;
+  bottom: 0;
 }
 
-/* Fullscreen Mode */
-:-webkit-full-screen {
-	width: 100% !important;
-	height: 100% !important;
+.CodeMirror-dialog input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 20em;
+  color: inherit;
+  font-family: monospace;
 }
 
-:-moz-full-screen .CodeMirror-scroll {
-	height: 100% !important;
-	overflow: scroll !important;
+.CodeMirror-dialog button {
+  font-size: 70%;
 }
 
-:-webkit-full-screen .CodeMirror-scroll {
-	height: 100% !important;
-	overflow: scroll !important;
+.CodeMirror-search-match {
+  background: gold;
+  border-top: 1px solid orange;
+  border-bottom: 1px solid orange;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  opacity: .5;
 }
