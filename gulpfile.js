@@ -164,12 +164,11 @@ gulp.task('default', ['build']);
 // Commit dist
 gulp.task('release', ['build'], shell.task([
 	'git ls-files -z dist | xargs -0 git update-index --no-assume-unchanged',
-	'git add dist',
-	'git commit -m "Distribution"',
+	'git add -A dist && git commit -m "Distribution"',
 	'git ls-files -z dist | xargs -0 git update-index --assume-unchanged',
 ]));
 
-gulp.task('deploy', ['release'], function() {
+gulp.task('deploy', ['build'], function() {
 	return gulp.src(DIST).pipe(subtree({
       remote: 'origin',
       branch: 'gh-pages',
