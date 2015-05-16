@@ -70,8 +70,49 @@ And everyone loves todo lists. Right?
 <div class="wrap bgg1">
 <div class="editor">
 <textarea id="textarea2">
-## This is another textarea proving that we can have multiples.
-Also notice those extra icons?
+## This is another textarea proving that we can have multiple ones!
+Also notice those extra icons? Those were created like this:
+
+```javascript
+var customActions = {
+	"potatoes": function potatoes() {
+		this.insert('![](https://33.media.tumblr.com/0de5ab0292ffc8dc7813e07978f89734/tumblr_n2patsaCTX1tvizo2o1_500.gif)');
+	},
+	"neverGoingToGiveYouUp": function neverGoingToGiveYouUp() {
+		this.insert([
+			"## You know you love it!",
+			'<iframe width="420" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>',
+		]);
+	}
+}
+
+var customKeyMaps = {
+	// We magicically replace Cmd with Ctrl if you are normal and don't use a Mac
+	"Shift-Cmd-Alt-1": "potatoes",
+	"Shift-Cmd-Alt-1": "neverGoingToGiveYouUp",
+};
+
+var customTools = [{
+	name: "more-actions",
+	action: null,
+	className: "fa fa-fighter-jet",
+	// Hey look, dropdowns
+	nested: [
+		{ name: "Click me!", action: "potatoes",showName: true },
+		{ name: "No, click me!", action: "neverGoingToGiveYouUp", showName: true }
+	]
+}];
+```
+
+and added with this simple code:
+
+```javascript
+textarea2 = mirrorMark(document.getElementById("textarea2"));
+textarea2.registerActions(customActions);
+textarea2.registerKeyMaps(customKeyMaps);
+textarea2.registerTools(customTools);
+textarea2.render();
+```
 </textarea>
 </div>
 </div>
@@ -84,59 +125,37 @@ Also notice those extra icons?
 <script src="./js/mirrormark.package.js"></script>
 
 <script>
-	/*
-	 * Setup custom actions, keymaps, and tools.
-	 */
+	textarea1 = mirrorMark(document.getElementById("textarea1"), { autofocus: true });
+	textarea1.render();
+
 	var customActions = {
-		// Inserts three images wrapped in a <div>
-		"threeUp": function threeUp() {
-			var html = [];
-			html.push("<div class='threeUp'>");
-			html.push("	<img src='' />");
-			html.push("	<img src='' />");
-			html.push("	<img src='' />");
-			html.push("</div>");
-
-			this.insert(html);
+		"potatoes": function potatoes() {
+			this.insert('![](https://33.media.tumblr.com/0de5ab0292ffc8dc7813e07978f89734/tumblr_n2patsaCTX1tvizo2o1_500.gif)');
 		},
-		"fourUp": function fourUp() {
-			var html = [];
-			html.push("<div class='fourUp'>");
-			html.push("	<img src='' />");
-			html.push("	<img src='' />");
-			html.push("	<img src='' />");
-			html.push("	<img src='' />");
-			html.push("</div>");
-
-			this.insert(html);
+		"neverGoingToGiveYouUp": function neverGoingToGiveYouUp() {
+			this.insert([
+				"## You know you love it!",
+				'<iframe width="420" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>',
+			]);
 		}
 	}
 
 	var customKeyMaps = {
-		"Shift-Cmd-Alt-3": "threeUp",
-		"Shift-Cmd-Alt-4": "fourUp",
+		// We magicically replace Cmd with Ctrl if you are normal and don't use a Mac
+		"Shift-Cmd-Alt-1": "potatoes",
+		"Shift-Cmd-Alt-1": "neverGoingToGiveYouUp",
 	};
 
 	var customTools = [{
-		name: "threeUp",
+		name: "more-actions",
 		action: null,
 		className: "fa fa-fighter-jet",
-		nested: [{
-			name: "threeUp",
-			action: "threeUp",
-			showName: true
-		},
-		{
-			name: "fourUp",
-			action: "fourUp",
-			showName: true
-		}
+		// Hey look, dropdowns
+		nested: [
+			{ name: "Click me!", action: "potatoes",showName: true },
+			{ name: "No, click me!", action: "neverGoingToGiveYouUp", showName: true }
 		]
 	}];
-
-
-	textarea1 = mirrorMark(document.getElementById("textarea1"), { autofocus: true });
-	textarea1.render();
 
 	textarea2 = mirrorMark(document.getElementById("textarea2"));
 	textarea2.registerActions(customActions);
