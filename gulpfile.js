@@ -114,6 +114,7 @@ gulp.task('js:combine', function() {
 gulp.task('js:package', function() {
 	var files = [
 		BOWER + 'codemirror/lib/codemirror.js',
+		BOWER + 'codemirror/mode/meta.js',
 
 		// Preview
 		BOWER + 'pagedown-extra/pagedown/Markdown.Converter.js',
