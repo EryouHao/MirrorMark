@@ -1,12 +1,18 @@
 var gulp = require('gulp'),
+	del = require('del'),                  // Used to clean files
+	rename = require('gulp-rename'),       // Used to rename *.* to *.min.*
+	runSequence = require('run-sequence'), // Don't release files before cleaning
+	subtree = require('gulp-subtree'),     // Used to commit to gh-pages
+	shell = require('gulp-shell'),
+
+	// Javascript
 	concat = require('gulp-concat'),
-	subtree = require('gulp-subtree'),
-	clean = require('gulp-clean'),
-	rename = require('gulp-rename'),
-	runSequence = require('run-sequence'),
-	minifycss = require('gulp-minify-css'),
 	uglify = require('gulp-uglify'),
-	streamify = require('gulp-streamify');
+
+	// Styles
+	less = require('gulp-less'),
+	minifycss = require('gulp-minify-css');
+
 
 // Directories
 var SRC = './src/',
@@ -47,24 +53,29 @@ var addons = [
 	"search/searchcursor",
 ];
 
-gulp.task('dist-clean', function() {
-	return gulp.src(DIST).pipe(clean());
+gulp.task('clean', function (cb) {
+  del(DIST + "**/*", cb);
 });
 
-gulp.task('copyFiles', function() {
+gulp.task('copy', function() {
 	return gulp.src([
 			SRC + '**/*.css',
-			SRC + '**/*.js',
 			SRC + 'index.html',
-		])
-		.pipe(gulp.dest(DIST));
+		]).pipe(gulp.dest(DIST));
 });
 
-gulp.task('packagecss', function() {
+gulp.task('css:less', function() {
+	return gulp.src(SRC + 'css/mirrormark.less')
+    .pipe(less({
+      paths: [ BOWER ]
+    }))
+    .pipe(gulp.dest(DIST + 'css'));
+})
+
+gulp.task('css:package', ['css:less'], function() {
 	var files = [
 		BOWER + 'codemirror/lib/codemirror.css',
-		SRC + 'css/mirrormark.css',
-		SRC + 'css/preview.css',
+		DIST + 'css/mirrormark.css',
 	];
 	[].push.apply(files, addons.map(function(path) {
 		return BOWER + "codemirror/addon/" + path + ".css";
@@ -75,16 +86,41 @@ gulp.task('packagecss', function() {
 		.pipe(gulp.dest(DIST + 'css'));
 });
 
-gulp.task('packagejs', function() {
+gulp.task('css:minify', ['css:package'], function() {
+	return gulp.src([
+			DIST + 'css/mirrormark.css',
+			DIST + 'css/mirrormark.package.css'
+		])
+		.pipe(minifycss())
+		.pipe(rename({ suffix: '.min' }))
+		.pipe(gulp.dest(DIST + 'css'));
+});
+
+/**
+ * Combine to produce the MirrorMark sources
+ */
+gulp.task('js:combine', function() {
+	return gulp.src( [
+		SRC + 'js/preview.js',
+		SRC + 'js/mirrormark.js',
+	])
+		.pipe(concat('mirrormark.js'))
+		.pipe(gulp.dest(DIST + 'js'));
+});
+
+/**
+ * Combine all files together
+ */
+gulp.task('js:package', function() {
 	var files = [
 		BOWER + 'codemirror/lib/codemirror.js',
 
 		// Preview
 		BOWER + 'pagedown-extra/pagedown/Markdown.Converter.js',
 		BOWER + 'pagedown-extra/Markdown.Extra.js',
+		SRC + 'js/preview.js',
 
 		SRC + 'js/mirrormark.js',
-		SRC + 'js/preview.js',
 	];
 	[].push.apply(files, languages.map(function(path) {
 		return BOWER + "codemirror/mode/" + path + "/" + path + ".js";
@@ -98,23 +134,15 @@ gulp.task('packagejs', function() {
 		.pipe(gulp.dest(DIST + 'js'));
 });
 
-gulp.task('minifycss', function() {
+/**
+ * Minify everything
+ */
+gulp.task('js:minify', ['js:package', 'js:combine'], function() {
 	return gulp.src([
-			DIST + 'css/demo.css',
-			DIST + 'css/codemirror.css',
-			DIST + 'css/mirrormark.css',
-			DIST + 'css/mirrormark.package.css'
-		])
-		.pipe(minifycss())
-		.pipe(rename({
-			suffix: '.min'
-		}))
-		.pipe(gulp.dest(DIST + 'css'));
-});
-
-gulp.task('minifyjs', function() {
-	return gulp.src(DIST + 'js/*.js')
-		.pipe(streamify(uglify()))
+		DIST + 'js/mirrormark.js',
+		DIST + 'js/mirrormark.package.js'
+	])
+		.pipe(uglify())
 		.pipe(rename({
 			suffix: '.min'
 		}))
@@ -122,26 +150,29 @@ gulp.task('minifyjs', function() {
 });
 
 
-/**
- * Master Tasks
- **/
-gulp.task('build', function(callback) {
-	// runSequence runs tasks in sequence to keep things straight forward
-	return runSequence('dist-clean', 'copyFiles', ['packagecss', 'packagejs'], ['minifycss', 'minifyjs'], callback);
-});
+gulp.task('js', ['js:combine', 'js:package', 'js:minify']);
+gulp.task('css', ['css:package', 'css:minify']);
 
+gulp.task('build', function(callback) {
+	// We should clean before anything else, everything else doesn't matter
+	return runSequence('clean', 'copy', 'js', 'css', callback);
+});
 
 // Just build it
 gulp.task('default', ['build']);
 
-// Deploy to GH pages
-gulp.task('temp', ['build'], function() {
-	return gulp.src(DIST + '/**/*')
-		.pipe(gulp.dest(BUILD));
-});
+// Commit dist
+gulp.task('release', ['build'], shell.task([
+	'git ls-files -z dist | xargs -0 git update-index --no-assume-unchanged',
+	'git add dist',
+	'git commit -m "Distribution"',
+	'git ls-files -z dist | xargs -0 git update-index --assume-unchanged',
+]));
 
-gulp.task('deploy', ['temp'], function() {
-	return gulp.src(BUILD)
-		.pipe(subtree())
-		.pipe(clean());
+gulp.task('deploy', ['release'], function() {
+	return gulp.src(DIST).pipe(subtree({
+      remote: 'origin',
+      branch: 'gh-pages',
+      message: 'Distribution',
+	}));
 });

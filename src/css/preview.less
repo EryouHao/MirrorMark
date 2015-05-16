@@ -1,0 +1,24 @@
+.cm-s-mirrormark.CodeMirror {
+    &.CodeMirror-has-preview {
+        .CodeMirror-scroll {
+            display: none;
+        }
+
+        .CodeMirror-preview {
+            display: block;
+        }
+    }
+
+    .CodeMirror-preview {
+        display: none;
+        height: auto !important;
+    	overflow: visible !important;
+    	padding: 30px 4%;
+    	box-sizing: border-box;
+    }
+
+    .CodeMirror-fullscreen .CodeMirror-preview{
+    	height: 100% !important;
+    	overflow: scroll !important;
+    }
+}

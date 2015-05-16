@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-# Simply adds the current dist folder to the index and commits
-git ls-files -z dist | xargs -0 git update-index --no-assume-unchanged
-git add dist
-git commit -m "Rebuild"
-git ls-files -z dist | xargs -0 git update-index --assume-unchanged
