@@ -48,6 +48,7 @@ var addons = [
 	// Find and replace
 	"dialog/dialog",
 	"scroll/annotatescrollbar",
+	"scroll/scrollpastend",
 	"search/matchesonscrollbar",
 	"search/search",
 	"search/searchcursor",
