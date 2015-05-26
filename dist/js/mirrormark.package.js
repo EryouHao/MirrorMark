@@ -11157,8 +11157,7 @@ else
 		  return define([], fn);
 		}
 
-		if (window)
-			window.mirrorMark = fn
+		if (window) window.mirrorMark = fn
 	})(mirrorMark);
 
 	/**
@@ -11375,10 +11374,19 @@ else
 				this.insert('---');
 			},
 			"fullScreen": function () {
-				this.cm.setOption("fullScreen", !this.cm.getOption("fullScreen"));
+				var fullScreen = !this.cm.getOption("fullScreen");
+
+				// You must turn off scrollPastEnd on after going full screen
+				// and before exiting it
+				if(!fullScreen) this.cm.setOption("scrollPastEnd", fullScreen)
+				this.cm.setOption("fullScreen", fullScreen);
+				if(fullScreen) this.cm.setOption("scrollPastEnd", fullScreen)
 			},
 			"exitFullScreen": function() {
-				if (this.cm.getOption("fullScreen")) this.cm.setOption("fullScreen", false);
+				if (this.cm.getOption("fullScreen")) {
+					this.cm.setOption("scrollPastEnd", fullScreen)
+					this.cm.setOption("fullScreen", false);
+				}
 			},
 			"preview": function() {
 				this.cm.setOption("preview", !this.cm.getOption("preview"));
@@ -11474,12 +11482,13 @@ else
 		// Defaults
 		var defaults = {
 			mode: 'gfm',
-			theme: 'mirrormark',
+			theme: 'default mirrormark',
 			tabSize: '2',
 			indentWithTabs: true,
 			lineWrapping: true,
 			autoCloseBrackets: true,
 			autoCloseTags: true,
+			addModeClass: true,
 			showToolbar: true,
 			extraKeys: {
 				"Enter": 'newlineAndIndentContinueMarkdownList',
@@ -16012,6 +16021,53 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     if (this.changeHandler) this.cm.off("change", this.changeHandler);
     this.div.parentNode.removeChild(this.div);
   };
+});
+
+// CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"));
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
+  "use strict";
+
+  CodeMirror.defineOption("scrollPastEnd", false, function(cm, val, old) {
+    if (old && old != CodeMirror.Init) {
+      cm.off("change", onChange);
+      cm.off("refresh", updateBottomMargin);
+      cm.display.lineSpace.parentNode.style.paddingBottom = "";
+      cm.state.scrollPastEndPadding = null;
+    }
+    if (val) {
+      cm.on("change", onChange);
+      cm.on("refresh", updateBottomMargin);
+      updateBottomMargin(cm);
+    }
+  });
+
+  function onChange(cm, change) {
+    if (CodeMirror.changeEnd(change).line == cm.lastLine())
+      updateBottomMargin(cm);
+  }
+
+  function updateBottomMargin(cm) {
+    var padding = "";
+    if (cm.lineCount() > 1) {
+      var totalH = cm.display.scroller.clientHeight - 30,
+          lastLineH = cm.getLineHandle(cm.lastLine()).height;
+      padding = (totalH - lastLineH) + "px";
+    }
+    if (cm.state.scrollPastEndPadding != padding) {
+      cm.state.scrollPastEndPadding = padding;
+      cm.display.lineSpace.parentNode.style.paddingBottom = padding;
+      cm.setSize();
+    }
+  }
 });
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others

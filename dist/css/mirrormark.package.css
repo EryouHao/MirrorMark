@@ -319,68 +319,44 @@ div.CodeMirror-cursors {
 /* Help users use markselection to safely style text background */
 span.CodeMirror-selectedtext { background: none; }
 
-.cm-s-mirrormark {
-  /* Default theme */
+.cm-s-mirrormark .cm-m-markdown {
+  color: #000;
+  font-family: sans-serif;
 }
-.cm-s-mirrormark .cm-header-1 {
-  font: 28px Menlo, Consolas, Monaco, 'Andale Mono', monospace;
+.cm-s-mirrormark .cm-m-markdown.cm-header {
+  font-family: Menlo, Consolas, Monaco, 'Andale Mono', monospace;
   font-weight: bold;
 }
-.cm-s-mirrormark .cm-header-2 {
-  font: 22px Menlo, Consolas, Monaco, 'Andale Mono', monospace;
-  font-weight: bold;
+.cm-s-mirrormark .cm-m-markdown.cm-header-1 {
+  font-size: 28px;
 }
-.cm-s-mirrormark .cm-header-2 {
-  font: 18px Menlo, Consolas, Monaco, 'Andale Mono', monospace;
-  font-weight: bold;
+.cm-s-mirrormark .cm-m-markdown.cm-header-2 {
+  font-size: 22px;
 }
-.cm-s-mirrormark .cm-quote,
-.cm-s-mirrormark .cm-link,
-.cm-s-mirrormark .cm-tag,
-.cm-s-mirrormark .cm-string {
+.cm-s-mirrormark .cm-m-markdown.cm-header-2 {
+  font-size: 18px;
+}
+.cm-s-mirrormark .cm-m-markdown.cm-quote {
+  color: #888;
+  background-color: rgba(128, 128, 128, 0.05);
+  padding: 5px;
+}
+.cm-s-mirrormark .cm-m-markdown.cm-quote,
+.cm-s-mirrormark .cm-m-markdown.cm-string {
   color: #888;
 }
-.cm-s-mirrormark .cm-keyword {
-  color: #708;
+.cm-s-mirrormark .cm-m-markdown.cm-tag,
+.cm-s-mirrormark .cm-m-markdown.cm-link {
+  color: #444;
 }
-.cm-s-mirrormark .cm-atom {
-  color: #219;
-}
-.cm-s-mirrormark .cm-number {
-  color: #164;
-}
-.cm-s-mirrormark .cm-def {
-  color: #00f;
-}
-.cm-s-mirrormark .cm-variable-2 {
-  color: #05a;
-}
-.cm-s-mirrormark .cm-variable-3 {
-  color: #085;
-}
-.cm-s-mirrormark .cm-comment {
+.cm-s-mirrormark .cm-m-markdown.cm-comment {
   color: #a50;
+  font-family: Menlo, Consolas, Monaco, 'Andale Mono', monospace;
 }
-.cm-s-mirrormark .cm-string-2 {
-  color: #f50;
-}
-.cm-s-mirrormark .cm-meta {
-  color: #555;
-}
-.cm-s-mirrormark .cm-qualifier {
-  color: #555;
-}
-.cm-s-mirrormark .cm-builtin {
-  color: #30a;
-}
-.cm-s-mirrormark .cm-bracket {
-  color: #997;
-}
-.cm-s-mirrormark .cm-tag {
+.cm-s-mirrormark .cm-m-markdown.cm-m-xml,
+.cm-s-mirrormark .cm-m-markdown.cm-bracket {
   color: #170;
-}
-.cm-s-mirrormark .cm-attribute {
-  color: #00c;
+  font-family: inherit;
 }
 .cm-s-mirrormark.CodeMirror.CodeMirror-has-preview .CodeMirror-scroll {
   display: none;
@@ -394,6 +370,16 @@ span.CodeMirror-selectedtext { background: none; }
   overflow: visible !important;
   padding: 30px 4%;
   box-sizing: border-box;
+  font-family: sans-serif;
+}
+.cm-s-mirrormark.CodeMirror .CodeMirror-preview h1,
+.cm-s-mirrormark.CodeMirror .CodeMirror-preview h2,
+.cm-s-mirrormark.CodeMirror .CodeMirror-preview h3 {
+  font-fami: Menlo, Consolas, Monaco, 'Andale Mono', monospace;
+}
+.cm-s-mirrormark.CodeMirror .CodeMirror-preview pre,
+.cm-s-mirrormark.CodeMirror .CodeMirror-preview code {
+  font-family: Menlo, Consolas, Monaco, 'Andale Mono', monospace;
 }
 .cm-s-mirrormark.CodeMirror .CodeMirror-fullscreen .CodeMirror-preview {
   height: 100% !important;

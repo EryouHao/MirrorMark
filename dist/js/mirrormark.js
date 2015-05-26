@@ -57,8 +57,7 @@
 		  return define([], fn);
 		}
 
-		if (window)
-			window.mirrorMark = fn
+		if (window) window.mirrorMark = fn
 	})(mirrorMark);
 
 	/**
@@ -275,10 +274,19 @@
 				this.insert('---');
 			},
 			"fullScreen": function () {
-				this.cm.setOption("fullScreen", !this.cm.getOption("fullScreen"));
+				var fullScreen = !this.cm.getOption("fullScreen");
+
+				// You must turn off scrollPastEnd on after going full screen
+				// and before exiting it
+				if(!fullScreen) this.cm.setOption("scrollPastEnd", fullScreen)
+				this.cm.setOption("fullScreen", fullScreen);
+				if(fullScreen) this.cm.setOption("scrollPastEnd", fullScreen)
 			},
 			"exitFullScreen": function() {
-				if (this.cm.getOption("fullScreen")) this.cm.setOption("fullScreen", false);
+				if (this.cm.getOption("fullScreen")) {
+					this.cm.setOption("scrollPastEnd", fullScreen)
+					this.cm.setOption("fullScreen", false);
+				}
 			},
 			"preview": function() {
 				this.cm.setOption("preview", !this.cm.getOption("preview"));
@@ -374,12 +382,13 @@
 		// Defaults
 		var defaults = {
 			mode: 'gfm',
-			theme: 'mirrormark',
+			theme: 'default mirrormark',
 			tabSize: '2',
 			indentWithTabs: true,
 			lineWrapping: true,
 			autoCloseBrackets: true,
 			autoCloseTags: true,
+			addModeClass: true,
 			showToolbar: true,
 			extraKeys: {
 				"Enter": 'newlineAndIndentContinueMarkdownList',
