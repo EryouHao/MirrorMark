@@ -1,25 +1,25 @@
 @import (reference) "font-awesome/less/font-awesome.less";
 
 .mirrormark-toolbar {
-    li > a {
-        .fa;
-    }
-    .bold a:before{ content: @fa-var-bold; }
-    .italicize a:before{ content: @fa-var-italic; }
-    .blockquote a:before{ content: @fa-var-quote-left; }
-    .strikethrough a:before{ content: @fa-var-strikethrough; }
-    .link a:before{ content: @fa-var-link; }
-    .image a:before{ content: @fa-var-image; }
-    .unorderedList a:before{ content: @fa-var-list; }
-    .orderedList a:before{ content: @fa-var-list-ol; }
-    .fullScreen a:before{ content: @fa-var-expand; }
-    .preview a:before{ content: @fa-var-file; }
+	li > a {
+		.fa;
+	}
+	.bold a:before{ content: @fa-var-bold; }
+	.italicize a:before{ content: @fa-var-italic; }
+	.blockquote a:before{ content: @fa-var-quote-left; }
+	.strikethrough a:before{ content: @fa-var-strikethrough; }
+	.link a:before{ content: @fa-var-link; }
+	.image a:before{ content: @fa-var-image; }
+	.unorderedList a:before{ content: @fa-var-list; }
+	.orderedList a:before{ content: @fa-var-list-ol; }
+	.fullScreen a:before{ content: @fa-var-expand; }
+	.preview a:before{ content: @fa-var-file; }
 }
 
 .cm-s-mirrormark.CodeMirror-fullscreen .mirrormark-toolbar {
-    .fullScreen a:before{ content: @fa-var-compress; }
+	.fullScreen a:before{ content: @fa-var-compress; }
 }
 
 .cm-s-mirrormark.CodeMirror-has-preview .mirrormark-toolbar {
-    .preview a:before{ content: @fa-var-file-o; }
+	.preview a:before{ content: @fa-var-file-o; }
 }

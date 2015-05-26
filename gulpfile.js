@@ -1,8 +1,8 @@
 var gulp = require('gulp'),
-	del = require('del'),                  // Used to clean files
-	rename = require('gulp-rename'),       // Used to rename *.* to *.min.*
+	del = require('del'),				  // Used to clean files
+	rename = require('gulp-rename'),	   // Used to rename *.* to *.min.*
 	runSequence = require('run-sequence'), // Don't release files before cleaning
-	subtree = require('gulp-subtree'),     // Used to commit to gh-pages
+	subtree = require('gulp-subtree'),	 // Used to commit to gh-pages
 	shell = require('gulp-shell'),
 
 	// Javascript
@@ -67,10 +67,10 @@ gulp.task('copy', function() {
 
 gulp.task('css:less', function() {
 	return gulp.src(SRC + 'css/mirrormark.less')
-    .pipe(less({
-      paths: [ BOWER ]
-    }))
-    .pipe(gulp.dest(DIST + 'css'));
+	.pipe(less({
+	  paths: [ BOWER ]
+	}))
+	.pipe(gulp.dest(DIST + 'css'));
 })
 
 gulp.task('css:package', ['css:less'], function() {
@@ -172,8 +172,8 @@ gulp.task('release', ['build'], shell.task([
 
 gulp.task('deploy', ['build'], function() {
 	return gulp.src(DIST).pipe(subtree({
-      remote: 'origin',
-      branch: 'gh-pages',
-      message: 'Distribution',
+	  remote: 'origin',
+	  branch: 'gh-pages',
+	  message: 'Distribution',
 	}));
 });
