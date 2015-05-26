@@ -1,10 +1,14 @@
+@mirror-mark-font: sans-serif;
+@mirror-mark-font-mono: Menlo, Consolas, Monaco, 'Andale Mono', monospace;
+@mirror-mark-font-header: @mirror-mark-font-mono;
+
 @import "highlighting.less";
 @import "preview.less";
 @import "toolbar-icons.less";
 @import "toolbar.less";
 
 .cm-s-mirrormark {
-	font: 16px/1.7 Menlo, Consolas, Monaco, 'Andale Mono', monospace;
+	font: 16px/1.7 @mirror-mark-font-mono;
 	box-sizing: border-box;
 	height: auto;
 	margin: auto;

@@ -339,12 +339,13 @@
 		// Defaults
 		var defaults = {
 			mode: 'gfm',
-			theme: 'mirrormark',
+			theme: 'default mirrormark',
 			tabSize: '2',
 			indentWithTabs: true,
 			lineWrapping: true,
 			autoCloseBrackets: true,
 			autoCloseTags: true,
+			addModeClass: true,
 			showToolbar: true,
 			extraKeys: {
 				"Enter": 'newlineAndIndentContinueMarkdownList',

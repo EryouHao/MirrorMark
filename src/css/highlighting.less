@@ -1,24 +1,49 @@
-.cm-s-mirrormark{
-	.cm-header-1 {
-		font: 28px Menlo, Consolas, Monaco, 'Andale Mono', monospace;
+.cm-s-mirrormark .cm-m-markdown {
+	color: #000;
+	font-family: @mirror-mark-font;
+
+	&.cm-header {
+		font-family: @mirror-mark-font-header;
 		font-weight: bold;
 	}
-
-	.cm-header-2 {
-		font: 22px Menlo, Consolas, Monaco, 'Andale Mono', monospace;
-		font-weight: bold;
+	&.cm-header-1 {
+		font-size: 28px;
 	}
 
-	.cm-header-2 {
-		font: 18px Menlo, Consolas, Monaco, 'Andale Mono', monospace;
-		font-weight: bold;
+	&.cm-header-2 {
+		font-size: 22px;
 	}
 
-	.cm-quote,
-	.cm-link,
-	.cm-tag,
-	.cm-string {
+	&.cm-header-2 {
+		font-size: 18px;
+	}
+
+	&.cm-quote {
+		color: #888;
+		background-color: rgba(128, 128, 128, 0.05);
+		padding: 5px;
+	}
+
+	&.cm-quote,
+	&.cm-string {
 		color: #888;
 	}
-	.cm-variable-2 { color: #000; }
+
+	&.cm-tag,
+	&.cm-link {
+		color: #444;
+	}
+
+	&.cm-comment {
+		color: #a50;
+		font-family: @mirror-mark-font-mono;
+	}
+
+	// There are issues where the first < of a HTML tag are classified
+	// with .cm-m-markdown.
+	&.cm-m-xml,
+	&.cm-bracket {
+		color: #170;
+		font-family: inherit;
+	}
 }
